@@ -1,0 +1,29 @@
+[package]
+name = "habit-tracker"
+version = "1.0.0"
+description = "Streakr - Habit Tracker"
+authors = ["you"]
+license = ""
+repository = ""
+default-run = "habit-tracker"
+edition = "2021"
+rust-version = "1.77.2"
+
+[lib]
+name = "habit_tracker_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[[bin]]
+name = "habit-tracker"
+path = "src/main.rs"
+
+[build-dependencies]
+tauri-build = { version = "2.0", features = [] }
+
+[dependencies]
+tauri = { version = "2.0", features = [] }
+tauri-plugin-fs = "2.0"
+tauri-plugin-notification = "2.0"
+tauri-plugin-shell = "2.0"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

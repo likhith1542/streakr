@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#0c0b09;--bg2:#141310;--bg3:#1c1a17;--surface:#222019;--border:#2e2c28;--border2:#3a3733;
+--text:#f5f3ef;--text2:#a09d96;--text3:#5c5a56;--accent:#f97316;--accent2:#fb923c;--accent-dim:#2a1a09;
+--radius:12px;--radius-lg:18px;font-size:16px
+}
+[data-theme="light"]{
+--bg:#fafaf8;--bg2:#f4f3f0;--bg3:#eeecea;--surface:#ffffff;--border:#e2e0db;--border2:#ccc9c3;
+--text:#1a1916;--text2:#5c5a54;--text3:#a09d96;--accent:#ea580c;--accent2:#f97316;--accent-dim:#fff4ed
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:400;line-height:1.6;min-height:100vh;transition:background .3s,color .3s;overflow-x:hidden}
+
+nav{position:sticky;top:0;z-index:100;padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:var(--bg);backdrop-filter:blur(12px);transition:background .3s,border-color .3s}
+.nav-logo{display:flex;align-items:center;gap:10px;font-family:'Instrument Serif',serif;font-size:1.25rem;color:var(--text);text-decoration:none}
+.nav-logo span{font-size:20px}
+.nav-right{display:flex;align-items:center;gap:8px}
+
+.theme-toggle{width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:14px}
+.theme-toggle:hover{border-color:var(--border2);color:var(--text);background:var(--bg3)}
+
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;text-decoration:none}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text2)}
+.btn-ghost:hover{border-color:var(--border2);color:var(--text);background:var(--bg3)}
+.btn-primary{background:var(--accent);border:1px solid var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent2);border-color:var(--accent2);transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(0)}
+
+section{padding:5rem 2rem;max-width:1100px;margin:0 auto}
+
+.hero{text-align:center;padding-top:6rem;padding-bottom:5rem}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--accent2);background:var(--accent-dim);border:1px solid color-mix(in srgb,var(--accent) 25%,transparent);padding:5px 14px;border-radius:100px;margin-bottom:2rem;letter-spacing:.03em;animation:fadeUp .6s ease both}
+.hero-title{font-family:'Instrument Serif',serif;font-size:clamp(3rem,7vw,5.5rem);line-height:1.08;letter-spacing:-.02em;color:var(--text);margin-bottom:1.5rem;animation:fadeUp .6s .1s ease both}
+.hero-title em{font-style:italic;color:var(--accent2)}
+.hero-sub{font-size:1.125rem;color:var(--text2);max-width:480px;margin:0 auto 2.5rem;line-height:1.7;animation:fadeUp .6s .2s ease both}
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:fadeUp .6s .3s ease both}
+.hero-meta{margin-top:2rem;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);animation:fadeUp .6s .4s ease both;letter-spacing:.04em}
+
+.hero-visual{max-width:780px;margin:4rem auto 0;animation:fadeUp .8s .5s ease both;position:relative}
+.app-frame{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.4)}
+[data-theme="light"] .app-frame{box-shadow:0 20px 60px rgba(0,0,0,.12)}
+.app-titlebar{height:40px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:6px}
+.dot{width:10px;height:10px;border-radius:50%}
+.dot-r{background:#ff5f57}.dot-y{background:#febc2e}.dot-g{background:#28c840}
+.app-body{display:grid;grid-template-columns:180px 1fr;min-height:360px}
+.app-sidebar{border-right:1px solid var(--border);padding:16px 12px;display:flex;flex-direction:column;gap:4px}
+.s-logo{display:flex;align-items:center;gap:8px;padding:8px;margin-bottom:8px}
+.s-logo-flame{font-size:18px}
+.s-logo-text{font-family:'Instrument Serif',serif;font-size:15px;color:var(--text)}
+.s-btn{padding:8px 14px;border-radius:8px;font-size:12px;font-weight:500;background:var(--accent);color:#fff;text-align:center;margin-bottom:8px}
+.s-nav{display:flex;flex-direction:column;gap:2px}
+.s-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;font-size:12px;color:var(--text2)}
+.s-item.active{background:var(--accent-dim);color:var(--accent2)}
+.s-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.app-main{padding:20px}
+.app-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
+.app-title{font-family:'Instrument Serif',serif;font-size:22px;color:var(--text)}
+.app-date{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3)}
+.app-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px}
+.stat-label{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text3);margin-bottom:4px}
+.stat-val{font-size:20px;font-weight:500;font-family:'Instrument Serif',serif;color:var(--text)}
+.habits-list{display:flex;flex-direction:column;gap:6px}
+.habit-row{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
+.habit-check{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.habit-check.done{background:var(--accent)}
+.habit-check.todo{border:2px solid var(--border2);background:transparent}
+.habit-info{flex:1}
+.habit-name{font-size:12px;font-weight:500;color:var(--text)}
+.habit-name.done{text-decoration:line-through;color:var(--text3)}
+.habit-freq{font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace}
+.habit-streak{display:flex;align-items:center;gap:4px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500}
+.progress-bar{flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;border-radius:2px;background:var(--accent)}
+
+.divider{border:none;border-top:1px solid var(--border);margin:0}
+
+.features{text-align:center}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--accent2);margin-bottom:1rem;text-transform:uppercase}
+.section-title{font-family:'Instrument Serif',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.15;color:var(--text);margin-bottom:1rem}
+.section-sub{color:var(--text2);font-size:1rem;max-width:460px;margin:0 auto 3.5rem}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.feature-card{background:var(--bg);padding:2rem;text-align:left;transition:background .2s}
+.feature-card:hover{background:var(--bg2)}
+.feature-icon{width:36px;height:36px;border-radius:8px;background:var(--accent-dim);border:1px solid color-mix(in srgb,var(--accent) 20%,transparent);display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:1.25rem}
+.feature-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:.5rem}
+.feature-desc{font-size:13px;color:var(--text2);line-height:1.6}
+
+.how{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.how-steps{display:flex;flex-direction:column;gap:2rem}
+.step{display:flex;gap:1rem}
+.step-num{width:28px;height:28px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--text3);flex-shrink:0;margin-top:2px}
+.step-body{}
+.step-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:.25rem}
+.step-desc{font-size:13px;color:var(--text2);line-height:1.6}
+
+.how-visual{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;display:flex;flex-direction:column;gap:12px}
+.heatmap-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-bottom:4px}
+.heatmap-grid{display:grid;grid-template-columns:repeat(26,1fr);gap:3px}
+.hm-cell{aspect-ratio:1;border-radius:2px}
+.hm-0{background:var(--border)}
+.hm-1{background:color-mix(in srgb,var(--accent) 40%,transparent)}
+.hm-2{background:color-mix(in srgb,var(--accent) 70%,transparent)}
+.hm-3{background:var(--accent)}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mini-stat{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center}
+.mini-stat-val{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:500;color:var(--accent2)}
+.mini-stat-label{font-size:10px;color:var(--text3);margin-top:2px}
+
+.privacy{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.privacy-inner{max-width:1100px;margin:0 auto;padding:5rem 2rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.privacy-title{font-family:'Instrument Serif',serif;font-size:clamp(1.8rem,3.5vw,2.5rem);line-height:1.2;color:var(--text);margin-bottom:1rem}
+.privacy-desc{color:var(--text2);font-size:15px;line-height:1.7}
+.privacy-points{display:flex;flex-direction:column;gap:12px}
+.privacy-point{display:flex;align-items:flex-start;gap:12px;padding:14px;background:var(--bg);border:1px solid var(--border);border-radius:10px}
+.pp-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.pp-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px}
+.pp-desc{font-size:12px;color:var(--text2)}
+
+.cta-section{text-align:center;padding:7rem 2rem}
+.cta-section .section-title{margin-bottom:1rem}
+.cta-section .section-sub{margin-bottom:2.5rem}
+.cta-os{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.os-badge{display:flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;text-decoration:none}
+.os-badge:hover{border-color:var(--border2);background:var(--bg3);transform:translateY(-1px)}
+.os-icon{font-size:18px}
+.os-sub{font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:1px}
+
+footer{border-top:1px solid var(--border);padding:2rem;display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto}
+.footer-logo{display:flex;align-items:center;gap:8px;font-family:'Instrument Serif',serif;font-size:15px;color:var(--text2)}
+.footer-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:700px){
+.how{grid-template-columns:1fr}
+.privacy-inner{grid-template-columns:1fr}
+.app-body{grid-template-columns:1fr}
+.app-sidebar{display:none}
+.app-stats{grid-template-columns:repeat(2,1fr)}
+footer{flex-direction:column;gap:1rem;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">
+    <span>🔥</span>
+    Streakr
+  </a>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeBtn" title="Toggle theme">☀</button>
+    <a class="btn btn-ghost" href="#download">Download</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-eyebrow">🔥 Local-first habit tracker</div>
+  <h1 class="hero-title">Build habits.<br><em>Keep the streak.</em></h1>
+  <p class="hero-sub">A beautifully minimal desktop app that keeps your streak alive — no account, no cloud, no distractions.</p>
+  <div class="hero-actions">
+    <a class="btn btn-primary" href="#download">⬇ Download for Mac</a>
+    <a class="btn btn-ghost" href="#features">See features</a>
+  </div>
+  <p class="hero-meta">FREE · OPEN SOURCE · DATA STAYS ON YOUR DEVICE</p>
+
+  <div class="hero-visual">
+    <div class="app-frame">
+      <div class="app-titlebar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+      </div>
+      <div class="app-body">
+        <div class="app-sidebar">
+          <div class="s-logo">
+            <span class="s-logo-flame">🔥</span>
+            <span class="s-logo-text">Streakr</span>
+          </div>
+          <div class="s-btn">+ New Habit</div>
+          <div class="s-nav">
+            <div class="s-item active"><div class="s-dot"></div>Today</div>
+            <div class="s-item"><div class="s-dot"></div>History</div>
+            <div class="s-item"><div class="s-dot"></div>Stats</div>
+            <div class="s-item"><div class="s-dot"></div>Settings</div>
+          </div>
+        </div>
+        <div class="app-main">
+          <div class="app-header">
+            <div>
+              <div class="app-title">Wednesday</div>
+              <div class="app-date">MARCH 18, 2026</div>
+            </div>
+          </div>
+          <div class="app-stats">
+            <div class="stat-card"><div class="stat-label">Done today</div><div class="stat-val">3/5</div></div>
+            <div class="stat-card"><div class="stat-label">Active</div><div class="stat-val">5</div></div>
+            <div class="stat-card"><div class="stat-label">Best streak</div><div class="stat-val">34d</div></div>
+            <div class="stat-card"><div class="stat-label">Total logs</div><div class="stat-val">142</div></div>
+          </div>
+          <div class="habits-list">
+            <div class="habit-row">
+              <div class="habit-check done">✓</div>
+              <div class="habit-info">
+                <div class="habit-name done">🏃 Morning run</div>
+                <div class="habit-freq">Daily</div>
+              </div>
+              <div class="habit-streak" style="color:var(--accent2)">🔥 34</div>
+            </div>
+            <div class="habit-row">
+              <div class="habit-check done">✓</div>
+              <div class="habit-info">
+                <div class="habit-name done">📚 Read 30 min</div>
+                <div class="habit-freq">Daily</div>
+              </div>
+              <div class="habit-streak" style="color:var(--accent2)">🔥 12</div>
+            </div>
+            <div class="habit-row">
+              <div class="habit-check done">✓</div>
+              <div class="habit-info">
+                <div class="habit-name done">💧 Drink water</div>
+                <div class="habit-freq">Daily</div>
+              </div>
+              <div class="habit-streak" style="color:var(--accent2)">🔥 7</div>
+            </div>
+            <div class="habit-row">
+              <div class="habit-check todo"></div>
+              <div class="habit-info">
+                <div class="habit-name">🧘 Meditate</div>
+                <div class="habit-freq">Mon · Wed · Fri</div>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
+            </div>
+            <div class="habit-row">
+              <div class="habit-check todo"></div>
+              <div class="habit-info">
+                <div class="habit-name">🎵 Practice guitar</div>
+                <div class="habit-freq">3× per week</div>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:55%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<section class="features" id="features">
+  <p class="section-label">Features</p>
+  <h2 class="section-title">Everything you need.<br>Nothing you don't.</h2>
+  <p class="section-sub">Designed with one goal — help you show up every day.</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🔥</div>
+      <div class="feature-title">Streak tracking</div>
+      <div class="feature-desc">Current streak, best streak, and at-risk warnings so you never break a chain by accident.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📅</div>
+      <div class="feature-title">Smart frequency</div>
+      <div class="feature-desc">Daily, specific days of the week, or X times per week. Rest days don't break your streak.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <div class="feature-title">History & heatmaps</div>
+      <div class="feature-desc">GitHub-style activity heatmaps and a monthly calendar. Click any day to edit history.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📈</div>
+      <div class="feature-title">Stats & charts</div>
+      <div class="feature-desc">Completion rate, 14-day trends, and a habit leaderboard to see what's sticking.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎨</div>
+      <div class="feature-title">Dark & light mode</div>
+      <div class="feature-desc">Warm dark theme or crisp light mode. Follows your system or set it manually.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💾</div>
+      <div class="feature-title">Export & import</div>
+      <div class="feature-desc">Download a full JSON backup anytime. Restore it on a new machine in one click.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="how">
+    <div>
+      <p class="section-label">How it works</p>
+      <h2 class="section-title" style="text-align:left;font-size:clamp(1.8rem,3vw,2.5rem)">Start in<br>30 seconds.</h2>
+      <p class="section-sub" style="margin:0 0 2.5rem;text-align:left">No signup. No onboarding flow. Just open and go.</p>
+      <div class="how-steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Download and open</div>
+            <div class="step-desc">A single .dmg file. Drag to Applications. Open Streakr.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Add your first habit</div>
+            <div class="step-desc">Name it, pick an emoji, set your frequency. Takes 10 seconds.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Check it off every day</div>
+            <div class="step-desc">One tap. Your streak grows. Come back tomorrow.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="how-visual">
+      <div>
+        <div class="heatmap-label">🏃 Morning run — last 6 months</div>
+        <div class="heatmap-grid" id="heatmap"></div>
+      </div>
+      <div class="stats-row">
+        <div class="mini-stat"><div class="mini-stat-val">34</div><div class="mini-stat-label">Current streak</div></div>
+        <div class="mini-stat"><div class="mini-stat-val">58</div><div class="mini-stat-label">Best streak</div></div>
+        <div class="mini-stat"><div class="mini-stat-val">87%</div><div class="mini-stat-label">Completion rate</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="privacy">
+  <div class="privacy-inner">
+    <div>
+      <p class="section-label">Privacy</p>
+      <h2 class="privacy-title">Your data lives<br>on your Mac.</h2>
+      <p class="privacy-desc">No account. No server. No analytics. Streakr is a local app — your habits are stored in a JSON file on your own machine and nowhere else.</p>
+    </div>
+    <div class="privacy-points">
+      <div class="privacy-point">
+        <div class="pp-icon">🔒</div>
+        <div>
+          <div class="pp-title">No account required</div>
+          <div class="pp-desc">Open the app and start immediately. We don't know you exist.</div>
+        </div>
+      </div>
+      <div class="privacy-point">
+        <div class="pp-icon">📁</div>
+        <div>
+          <div class="pp-title">Local JSON storage</div>
+          <div class="pp-desc">Data lives at ~/Library/Application Support/com.streakr.habittracker/</div>
+        </div>
+      </div>
+      <div class="privacy-point">
+        <div class="pp-icon">📤</div>
+        <div>
+          <div class="pp-title">Full export anytime</div>
+          <div class="pp-desc">Download a JSON backup and import it on any new machine.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="cta-section" id="download">
+  <p class="section-label">Download</p>
+  <h2 class="section-title">Free. Forever.</h2>
+  <p class="section-sub">No trials. No subscriptions. No catch. Download and start your first streak today.</p>
+  <div class="cta-os">
+    <a class="os-badge" href="#">
+      <span class="os-icon"> </span>
+      <div>
+        <div>Download for macOS</div>
+        <div class="os-sub">Apple Silicon · v1.0.0 · 8MB</div>
+      </div>
+    </a>
+    <a class="os-badge" href="#" style="opacity:.5;cursor:not-allowed">
+      <span class="os-icon">⊞</span>
+      <div>
+        <div>Windows</div>
+        <div class="os-sub">Coming soon</div>
+      </div>
+    </a>
+  </div>
+  <p style="margin-top:1.5rem;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3)">
+    macOS 11+ required · Also available on <a href="#" style="color:var(--accent2);text-decoration:none">GitHub</a>
+  </p>
+</section>
+
+<footer>
+  <div class="footer-logo">
+    <span>🔥</span>
+    Streakr
+  </div>
+  <div class="footer-meta">BUILT WITH TAURI + REACT · LOCAL-FIRST · FREE & OPEN SOURCE</div>
+</footer>
+
+<script>
+const hm = document.getElementById('heatmap');
+const vals = [0,0,1,0,1,2,3,3,2,1,0,1,3,3,3,2,1,0,0,1,2,3,3,3,3,3,
+              0,1,1,2,3,3,2,0,0,1,3,3,3,3,2,1,1,0,3,3,3,3,3,3,2,1,
+              0,0,1,3,3,3,3,3,2,1,0,0,1,2,3,3,3,3,3,2,1,1,0,0,1,3,
+              3,3,3,2,1,0,0,1,2,3,3,3,2,1,0,1,3,3,3,3,2,0,0,1,2,3,
+              3,3,3,3,3,2,1,0,0,1,3,3,3,3,2,1,0,0,1,2,3,3,3,3,3,3,
+              2,1,0,0,1,3,3,3,2,0,1,2,3,3,3,3,3,2,1,0,0,1,2,3,3,3,
+              3,3,3,2,1,0,3,3,3,3,3,2,1,0,0,1,3,3,3,3,3,3,3];
+vals.forEach(v=>{
+  const d=document.createElement('div');
+  d.className='hm-cell hm-'+v;
+  hm.appendChild(d);
+});
+
+const btn = document.getElementById('themeBtn');
+const html = document.documentElement;
+btn.addEventListener('click',()=>{
+  const isDark = html.getAttribute('data-theme')==='dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  btn.textContent = isDark ? '☾' : '☀';
+});
+</script>
+</body>
+</html>
